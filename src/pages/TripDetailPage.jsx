@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { Button, ButtonGroup, Toast, ToastContainer } from 'react-bootstrap'
 import { useTrips } from '../context/TripContext.jsx'
 
 function formatDate(ts) {
@@ -9,11 +11,23 @@ function formatDate(ts) {
   }
 }
 
+const STAR_LABELS = ['Terrible', 'Poor', 'Okay', 'Good', 'Amazing']
+
 function TripDetailPage() {
   const { id } = useParams()
-  const { getTripById, isBookmarked, toggleBookmark } = useTrips()
+  const { getTripById, isBookmarked, toggleBookmark, rateTrip, getRating } = useTrips()
+  const [hovered, setHovered] = useState(null)
+  const [showToast, setShowToast] = useState(false)
+  const [toastRating, setToastRating] = useState(null)
 
   const trip = getTripById(id)
+  const currentRating = trip ? getRating(trip.id) : null
+
+  const handleRate = (stars) => {
+    rateTrip(trip.id, stars)
+    setToastRating(stars)
+    setShowToast(true)
+  }
   if (!trip) {
     return (
       <section className="page">
@@ -104,6 +118,30 @@ function TripDetailPage() {
       </div>
 
       <section className="card">
+        <h3 className="card-title">Rate this Trip</h3>
+        <ButtonGroup>
+          {[1, 2, 3, 4, 5].map((star) => (
+            <Button
+              key={star}
+              variant={star <= (hovered ?? currentRating ?? 0) ? 'warning' : 'outline-secondary'}
+              onMouseEnter={() => setHovered(star)}
+              onMouseLeave={() => setHovered(null)}
+              onClick={() => handleRate(star)}
+              style={{ fontSize: '20px', minWidth: '48px' }}
+              aria-label={STAR_LABELS[star - 1]}
+            >
+              ★
+            </Button>
+          ))}
+        </ButtonGroup>
+        {currentRating && (
+          <p className="card-text" style={{ marginTop: '10px' }}>
+            Your rating: <strong>{STAR_LABELS[currentRating - 1]}</strong> ({currentRating}/5)
+          </p>
+        )}
+      </section>
+
+      <section className="card">
         <h3 className="card-title">Itinerary</h3>
         {trip.itinerary?.length ? (
           <ol className="itinerary">
@@ -121,6 +159,14 @@ function TripDetailPage() {
           <p className="card-text">No day-by-day itinerary yet.</p>
         )}
       </section>
+
+      <ToastContainer position="bottom-end" className="p-3" style={{ zIndex: 9999 }}>
+        <Toast show={showToast} onClose={() => setShowToast(false)} delay={2500} autohide bg="dark">
+          <Toast.Body className="text-white">
+            Rated <strong>{toastRating}/5</strong> — {toastRating ? STAR_LABELS[toastRating - 1] : ''}!
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
     </section>
   )
 }

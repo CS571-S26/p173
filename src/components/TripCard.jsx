@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
+import { Badge } from 'react-bootstrap'
 import { useTrips } from '../context/TripContext.jsx'
 
 function TripCard({ trip }) {
-  const { isBookmarked, toggleBookmark } = useTrips()
+  const { isBookmarked, toggleBookmark, getRating } = useTrips()
+  const rating = getRating(trip.id)
   const bookmarked = isBookmarked(trip.id)
 
   return (
@@ -30,6 +32,11 @@ function TripCard({ trip }) {
       <div className="trip-card-body">
         <div className="trip-card-meta">
           <span className="pill">{trip.country}</span>
+          {rating && (
+            <Badge bg="warning" text="dark" style={{ fontSize: '13px', padding: '5px 10px' }}>
+              {'★'.repeat(rating)} {rating}/5
+            </Badge>
+          )}
         </div>
         <h3 className="trip-card-title">
           <Link to={`/trip/${trip.id}`}>{trip.title}</Link>

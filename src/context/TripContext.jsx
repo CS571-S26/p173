@@ -4,6 +4,7 @@ const TripContext = createContext(null)
 
 const STORAGE_KEY = 'trip-rater-trips-v1'
 const BOOKMARKS_KEY = 'trip-rater-bookmarks-v1'
+const RATINGS_KEY = 'trip-rater-ratings-v1'
 
 const seedTrips = [
   {
@@ -86,6 +87,9 @@ export function TripProvider({ children }) {
   const [bookmarkedIds, setBookmarkedIds] = useState(() =>
     loadFromStorage(BOOKMARKS_KEY, [])
   )
+  const [ratings, setRatings] = useState(() =>
+    loadFromStorage(RATINGS_KEY, {})
+  )
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -96,6 +100,11 @@ export function TripProvider({ children }) {
     if (typeof window === 'undefined') return
     window.localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarkedIds))
   }, [bookmarkedIds])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    window.localStorage.setItem(RATINGS_KEY, JSON.stringify(ratings))
+  }, [ratings])
 
   const addTrip = (trip) => {
     setTrips((prev) => [
@@ -123,6 +132,12 @@ export function TripProvider({ children }) {
     [trips, bookmarkedIds]
   )
 
+  const rateTrip = (id, stars) => {
+    setRatings((prev) => ({ ...prev, [id]: stars }))
+  }
+
+  const getRating = (id) => ratings[id] ?? null
+
   const value = {
     trips,
     addTrip,
@@ -130,6 +145,8 @@ export function TripProvider({ children }) {
     isBookmarked,
     getTripById,
     bookmarkedTrips,
+    rateTrip,
+    getRating,
   }
 
   return <TripContext.Provider value={value}>{children}</TripContext.Provider>
