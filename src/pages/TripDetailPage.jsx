@@ -24,8 +24,9 @@ function TripDetailPage() {
   const currentRating = trip ? getRating(trip.id) : null
 
   const handleRate = (stars) => {
-    rateTrip(trip.id, stars)
-    setToastRating(stars)
+    const next = stars === currentRating ? null : stars
+    rateTrip(trip.id, next)
+    setToastRating(next)
     setShowToast(true)
   }
   if (!trip) {
@@ -120,19 +121,29 @@ function TripDetailPage() {
       <section className="card">
         <h3 className="card-title">Rate this Trip</h3>
         <ButtonGroup>
-          {[1, 2, 3, 4, 5].map((star) => (
-            <Button
-              key={star}
-              variant={star <= (hovered ?? currentRating ?? 0) ? 'warning' : 'outline-secondary'}
-              onMouseEnter={() => setHovered(star)}
-              onMouseLeave={() => setHovered(null)}
-              onClick={() => handleRate(star)}
-              style={{ fontSize: '20px', minWidth: '48px' }}
-              aria-label={STAR_LABELS[star - 1]}
-            >
-              ★
-            </Button>
-          ))}
+          {[1, 2, 3, 4, 5].map((star) => {
+            const filled = star <= (hovered ?? currentRating ?? 0)
+            return (
+              <Button
+                key={star}
+                variant="outline-secondary"
+                onMouseEnter={() => setHovered(star)}
+                onMouseLeave={() => setHovered(null)}
+                onClick={() => handleRate(star)}
+                aria-label={STAR_LABELS[star - 1]}
+                style={{
+                  fontSize: '22px',
+                  minWidth: '52px',
+                  backgroundColor: filled ? '#f5c518' : 'transparent',
+                  borderColor: filled ? '#f5c518' : undefined,
+                  color: filled ? '#000' : undefined,
+                  transition: 'background-color 0.1s, border-color 0.1s',
+                }}
+              >
+                ★
+              </Button>
+            )
+          })}
         </ButtonGroup>
         {currentRating && (
           <p className="card-text" style={{ marginTop: '10px' }}>
@@ -163,7 +174,9 @@ function TripDetailPage() {
       <ToastContainer position="bottom-end" className="p-3" style={{ zIndex: 9999 }}>
         <Toast show={showToast} onClose={() => setShowToast(false)} delay={2500} autohide bg="dark">
           <Toast.Body className="text-white">
-            Rated <strong>{toastRating}/5</strong> — {toastRating ? STAR_LABELS[toastRating - 1] : ''}!
+            {toastRating
+              ? <>Rated <strong>{toastRating}/5</strong> — {STAR_LABELS[toastRating - 1]}!</>
+              : 'Rating removed.'}
           </Toast.Body>
         </Toast>
       </ToastContainer>

@@ -1,18 +1,30 @@
 import { useMemo, useState } from 'react'
 import { useTrips } from '../context/TripContext.jsx'
 import TripCard from '../components/TripCard.jsx'
+import TripStats from '../components/TripStats.jsx'
+import SortBar from '../components/SortBar.jsx'
 
 function FeedPage() {
-  const { trips } = useTrips()
+  const { trips, getRating } = useTrips()
   const [countryQuery, setCountryQuery] = useState('')
+  const [sort, setSort] = useState('newest')
 
   const filteredTrips = useMemo(() => {
     const query = countryQuery.trim().toLowerCase()
-    if (!query) return trips
-    return trips.filter((trip) =>
-      trip.country.toLowerCase().includes(query.toLowerCase())
-    )
-  }, [trips, countryQuery])
+    const filtered = query
+      ? trips.filter((trip) => trip.country.toLowerCase().includes(query))
+      : [...trips]
+
+    if (sort === 'newest') {
+      filtered.sort((a, b) => b.createdAt - a.createdAt)
+    } else if (sort === 'rating') {
+      filtered.sort((a, b) => (getRating(b.id) ?? 0) - (getRating(a.id) ?? 0))
+    } else if (sort === 'country') {
+      filtered.sort((a, b) => a.country.localeCompare(b.country))
+    }
+
+    return filtered
+  }, [trips, countryQuery, sort, getRating])
 
   return (
     <section className="page">
@@ -39,6 +51,9 @@ function FeedPage() {
         </div>
       </header>
 
+      <TripStats />
+      <SortBar sort={sort} onSort={setSort} />
+
       {filteredTrips.length === 0 ? (
         <div className="empty-state">
           <h3>No trips found</h3>
@@ -59,4 +74,3 @@ function FeedPage() {
 }
 
 export default FeedPage
-

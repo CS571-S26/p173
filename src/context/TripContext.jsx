@@ -133,7 +133,14 @@ export function TripProvider({ children }) {
   )
 
   const rateTrip = (id, stars) => {
-    setRatings((prev) => ({ ...prev, [id]: stars }))
+    setRatings((prev) => {
+      if (stars === null) {
+        const next = { ...prev }
+        delete next[id]
+        return next
+      }
+      return { ...prev, [id]: stars }
+    })
   }
 
   const getRating = (id) => ratings[id] ?? null
