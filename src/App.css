@@ -72,6 +72,17 @@
   border-color: var(--accent-border);
 }
 
+.theme-toggle {
+  text-decoration: none;
+  color: var(--text-h);
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--social-bg);
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
 .app-main {
   width: 1126px;
   max-width: 100%;
@@ -244,8 +255,9 @@
 }
 
 .bookmark-badge-active {
-  background: var(--accent-bg);
-  border-color: var(--accent-border);
+  background: rgba(245, 197, 24, 0.18);
+  border-color: rgba(245, 197, 24, 0.6);
+  color: #f5c518;
 }
 
 .trip-card-body {
@@ -362,10 +374,10 @@
 
 .breadcrumbs {
   font-size: 12px;
-  opacity: 0.85;
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-bottom: 4px;
 }
 
 .breadcrumbs a {
@@ -377,8 +389,12 @@
   text-decoration: underline;
 }
 
+.breadcrumbs span {
+  color: var(--text-h);
+}
+
 .breadcrumbs-sep {
-  opacity: 0.6;
+  color: var(--text);
 }
 
 .gallery {
@@ -640,11 +656,6 @@
 }
 
 /* Map view */
-
-:root {
-  --map-land: #2a2d3e;
-  --map-border: #3d4160;
-}
 
 .feed-controls {
   display: flex;

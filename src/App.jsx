@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom'
 import FeedPage from './pages/FeedPage.jsx'
 import TripDetailPage from './pages/TripDetailPage.jsx'
@@ -7,7 +8,22 @@ import CollectionsPage from './pages/CollectionsPage.jsx'
 import CollectionDetailPage from './pages/CollectionDetailPage.jsx'
 import './App.css'
 
+function getInitialTheme() {
+  const stored = localStorage.getItem('trip-rater-theme')
+  if (stored === 'light' || stored === 'dark') return stored
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
 function App() {
+  const [theme, setTheme] = useState(getInitialTheme)
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+    localStorage.setItem('trip-rater-theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))
+
   return (
     <div className="app-root">
       <header className="app-header">
@@ -19,6 +35,14 @@ function App() {
           </div>
         </div>
         <nav className="nav">
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          >
+            {theme === 'dark' ? '☀ Light' : '☾ Dark'}
+          </button>
           <NavLink
             to="/"
             end
