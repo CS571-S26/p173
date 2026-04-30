@@ -88,8 +88,8 @@
   padding: 18px 24px;
   box-sizing: border-box;
   border-top: 1px solid var(--border);
-  opacity: 0.85;
   font-size: 13px;
+  color: var(--text-h);
 }
 
 .page {
@@ -168,7 +168,7 @@
 .help-text {
   margin-top: 8px;
   font-size: 12px;
-  opacity: 0.8;
+  color: var(--text);
 }
 
 .trip-grid {
@@ -294,9 +294,22 @@
 .empty-state {
   border: 1px dashed var(--border);
   border-radius: 18px;
-  padding: 18px;
+  padding: 40px 24px;
   text-align: center;
   background: color-mix(in srgb, var(--bg) 92%, var(--code-bg));
+}
+
+.empty-state h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: var(--text-h);
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 15px;
+  color: var(--text-h);
+  opacity: 0.75;
 }
 
 .highlight {
@@ -605,6 +618,312 @@
 .sort-btn-active {
   background: var(--accent-bg);
   border-color: var(--accent-border);
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 4px;
+}
+
+@media (max-width: 980px) {
+  .related-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .related-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Map view */
+
+:root {
+  --map-land: #2a2d3e;
+  --map-border: #3d4160;
+}
+
+.feed-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 6px;
+}
+
+.map-container {
+  position: relative;
+  height: 480px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.map-hint {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  z-index: 2;
+  font-size: 12px;
+  color: var(--text);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  margin: 0;
+  pointer-events: none;
+}
+
+.map-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.map-tooltip {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  z-index: 3;
+  background: color-mix(in srgb, var(--bg) 95%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  pointer-events: none;
+}
+
+.map-tooltip strong {
+  font-size: 14px;
+  color: var(--text-h);
+}
+
+.map-tooltip span {
+  font-size: 12px;
+  color: var(--text);
+}
+
+.map-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  color: var(--text);
+}
+
+/* Collections */
+
+.collection-create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.collection-create-row {
+  display: flex;
+  gap: 10px;
+}
+
+.collection-create-row .input {
+  flex: 1;
+}
+
+.collections-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+@media (max-width: 980px) {
+  .collections-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .collections-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.collection-card {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--bg) 92%, var(--code-bg));
+  box-shadow: var(--shadow);
+}
+
+.collection-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.collection-card-cover {
+  height: 140px;
+  background: var(--code-bg);
+}
+
+.collection-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.collection-card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+.collection-card-body {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.collection-card-title {
+  margin: 0;
+  font-size: 15px;
+  color: var(--text-h);
+}
+
+.collection-card-link:hover .collection-card-title {
+  text-decoration: underline;
+}
+
+.collection-delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  color: var(--text-h);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+}
+
+.collection-delete-btn:hover {
+  background: color-mix(in srgb, #ff3b30 15%, var(--bg));
+  border-color: #ff3b30;
+}
+
+.collection-trip-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.collection-remove-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+  text-align: center;
+}
+
+.collection-remove-btn:hover {
+  background: color-mix(in srgb, #ff3b30 12%, var(--bg));
+  border-color: #ff3b30;
+  color: var(--text-h);
+}
+
+.collection-picker-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.collection-picker-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--social-bg);
+  cursor: pointer;
+  text-align: left;
+  color: var(--text-h);
+  font-size: 14px;
+}
+
+.collection-picker-item:hover {
+  border-color: var(--accent-border);
+}
+
+.collection-picker-item-active {
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+}
+
+.collection-picker-check {
+  font-size: 14px;
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.collection-picker-name {
+  flex: 1;
+}
+
+.collection-picker-count {
+  font-size: 12px;
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.collection-inline-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.collection-inline-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.collection-picker-manage {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.collection-picker-manage:hover {
+  text-decoration: underline;
 }
 
 .form-error {

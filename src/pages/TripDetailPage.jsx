@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Button, ButtonGroup, Toast, ToastContainer } from 'react-bootstrap'
 import { useTrips } from '../context/TripContext.jsx'
+import CollectionPicker from '../components/CollectionPicker.jsx'
+import RelatedTrips from '../components/RelatedTrips.jsx'
 
 function formatDate(ts) {
   try {
@@ -152,6 +154,8 @@ function TripDetailPage() {
         )}
       </section>
 
+      <CollectionPicker tripId={trip.id} />
+
       <section className="card">
         <h3 className="card-title">Itinerary</h3>
         {trip.itinerary?.length ? (
@@ -170,6 +174,8 @@ function TripDetailPage() {
           <p className="card-text">No day-by-day itinerary yet.</p>
         )}
       </section>
+
+      <RelatedTrips currentId={trip.id} country={trip.country} />
 
       <ToastContainer position="bottom-end" className="p-3" style={{ zIndex: 9999 }}>
         <Toast show={showToast} onClose={() => setShowToast(false)} delay={2500} autohide bg="dark">

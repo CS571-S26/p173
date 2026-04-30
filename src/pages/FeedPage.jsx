@@ -3,11 +3,13 @@ import { useTrips } from '../context/TripContext.jsx'
 import TripCard from '../components/TripCard.jsx'
 import TripStats from '../components/TripStats.jsx'
 import SortBar from '../components/SortBar.jsx'
+import MapView from '../components/MapView.jsx'
 
 function FeedPage() {
   const { trips, getRating } = useTrips()
   const [countryQuery, setCountryQuery] = useState('')
   const [sort, setSort] = useState('newest')
+  const [view, setView] = useState('grid')
 
   const filteredTrips = useMemo(() => {
     const query = countryQuery.trim().toLowerCase()
@@ -26,6 +28,11 @@ function FeedPage() {
     return filtered
   }, [trips, countryQuery, sort, getRating])
 
+  const handleSelectCountry = (country) => {
+    setCountryQuery(country)
+    setView('grid')
+  }
+
   return (
     <section className="page">
       <header className="page-header">
@@ -35,39 +42,64 @@ function FeedPage() {
             Browse trips from around the world. Search by country to get
             inspired for your next adventure.
           </p>
+          <div className="search-group" style={{ marginTop: '12px' }}>
+            <label className="field-label" htmlFor="country-search">
+              Search by country
+            </label>
+            <input
+              id="country-search"
+              type="text"
+              className="input"
+              placeholder="e.g. Japan, Greece, Canada..."
+              value={countryQuery}
+              onChange={(e) => setCountryQuery(e.target.value)}
+            />
+          </div>
         </div>
-        <div className="search-group">
-          <label className="field-label" htmlFor="country-search">
-            Search by country
-          </label>
-          <input
-            id="country-search"
-            type="text"
-            className="input"
-            placeholder="e.g. Japan, Greece, Canada..."
-            value={countryQuery}
-            onChange={(e) => setCountryQuery(e.target.value)}
-          />
+        <div className="view-toggle">
+          <button
+            type="button"
+            className={`sort-btn ${view === 'grid' ? 'sort-btn-active' : ''}`}
+            onClick={() => setView('grid')}
+          >
+            ⊞ Grid
+          </button>
+          <button
+            type="button"
+            className={`sort-btn ${view === 'map' ? 'sort-btn-active' : ''}`}
+            onClick={() => setView('map')}
+          >
+            ◎ Map
+          </button>
         </div>
       </header>
 
       <TripStats />
-      <SortBar sort={sort} onSort={setSort} />
 
-      {filteredTrips.length === 0 ? (
-        <div className="empty-state">
-          <h3>No trips found</h3>
-          <p>
-            Try a different country name, or{' '}
-            <span className="highlight">create your first trip</span>.
-          </p>
+      {view === 'map' ? (
+        <div className="map-container card">
+          <p className="map-hint">Click a pin to filter trips by country.</p>
+          <MapView onSelectCountry={handleSelectCountry} />
         </div>
       ) : (
-        <div className="trip-grid">
-          {filteredTrips.map((trip) => (
-            <TripCard key={trip.id} trip={trip} />
-          ))}
-        </div>
+        <>
+          <SortBar sort={sort} onSort={setSort} />
+          {filteredTrips.length === 0 ? (
+            <div className="empty-state">
+              <h3>No trips found</h3>
+              <p>
+                Try a different country name, or{' '}
+                <span className="highlight">create your first trip</span>.
+              </p>
+            </div>
+          ) : (
+            <div className="trip-grid">
+              {filteredTrips.map((trip) => (
+                <TripCard key={trip.id} trip={trip} />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </section>
   )

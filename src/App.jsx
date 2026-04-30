@@ -3,6 +3,8 @@ import FeedPage from './pages/FeedPage.jsx'
 import TripDetailPage from './pages/TripDetailPage.jsx'
 import CreateTripPage from './pages/CreateTripPage.jsx'
 import BookmarksPage from './pages/BookmarksPage.jsx'
+import CollectionsPage from './pages/CollectionsPage.jsx'
+import CollectionDetailPage from './pages/CollectionDetailPage.jsx'
 import './App.css'
 
 function App() {
@@ -42,6 +44,14 @@ function App() {
           >
             Bookmarks
           </NavLink>
+          <NavLink
+            to="/collections"
+            className={({ isActive }) =>
+              isActive ? 'nav-link nav-link-active' : 'nav-link'
+            }
+          >
+            Collections
+          </NavLink>
         </nav>
       </header>
 
@@ -51,6 +61,8 @@ function App() {
           <Route path="/trip/:id" element={<TripDetailPage />} />
           <Route path="/create" element={<CreateTripPage />} />
           <Route path="/bookmarks" element={<BookmarksPage />} />
+          <Route path="/collections" element={<CollectionsPage />} />
+          <Route path="/collections/:id" element={<CollectionDetailPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
